@@ -1,7 +1,8 @@
 {
   "optional": [
     "es7.decorators",
-    "es7.objectRestSpread"
+    "es7.objectRestSpread",
+    "es7.classProperties"
   ],
   "env": {
     "start": {
