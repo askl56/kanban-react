@@ -1,61 +1,49 @@
 import React from 'react';
+import {DragSource, DropTarget} from 'react-dnd';
+import ItemTypes from '../constants/itemTypes';
 
-export default class Note extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      editing: false
+const noteSource = {
+  beginDrag(props) {
+    return {
+      id: props.id
     };
-  }
-  render() {
-    const editing = this.state.editing;
+  },
 
-    return (
-      <div>
-      {editing ? this.renderEdit() : this.renderTask()}
-      </div>
-      );
+  isDragging(props, monitor) {
+    return props.id === monitor.getItem().id;
   }
+};
 
-  renderEdit = () => {
-    return <input type="text"
-    autoFocus={true}
-    defaultValue={this.props.task}
-    onBlur={this.finishEdit}
-    onKeyPress={this.checkEnter} />;
-  }
+const noteTarget = {
+  hover(targetProps, monitor) {
+    const targetId = targetProps.id;
+    const sourceProps = monitor.getItem();
+    const sourceId = sourceProps.id;
 
-  renderTask = () => {
-    const onDelete = this.props.onDelete;
-    return (
-      <div onClick={this.edit}>
-      <span className="task">{this.props.task}</span>
-      {onDelete ? this.renderDelete() : null }
-      </div>
-      );
-  }
-
-  renderDelete = () => {
-    return <button className="delete" onClick={this.props.onDelete}>x</button>;
-  }
-
-  edit = () => {
-    this.setState({
-      editing: true
-    });
-  }
-
-  checkEnter = (e) => {
-    if(e.key === 'Enter') {
-      this.finishEdit(e);
+    if(sourceId !== targetId) {
+      targetProps.onMove({sourceId, targetId});
     }
   }
+};
 
-  finishEdit = (e) => {
-    this.props.onEdit(e.target.value);
-    this.setState({
-      editing: false
-    });
+@DragSource(ItemTypes.NOTE, noteSource, (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  isDragging: monitor.isDragging() // map isDragging() state to isDragging prop
+}))
+
+@DropTarget(ItemTypes.NOTE, noteTarget, (connect) => ({
+  connectDropTarget: connect.dropTarget()
+}))
+
+export default class Note extends React.Component {
+  render() {
+    const {connectDragSource, connectDropTarget, isDragging,
+      onMove, id, ...props} = this.props;
+
+      return connectDragSource(connectDropTarget(
+        <li style={{
+          opacity: isDragging ? 0 : 1
+        }} {...props}>{props.children}</li>
+        ));
+    }
   }
-}
