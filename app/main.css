@@ -36,12 +36,9 @@ body {
 .note .delete {
   float: right;
   padding: 0;
-
   background-color: #fdfdfd;
   border: none;
-
   cursor: pointer;
-
   visibility: hidden;
 }
 
