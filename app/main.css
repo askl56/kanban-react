@@ -28,7 +28,7 @@ body {
   transition: 0.6s;
 }
 
-.note .task {
+.note .value {
   /* force to use inline-block so that it gets minimum height */
   display: inline-block;
 }
@@ -44,4 +44,43 @@ body {
 
 .note:hover .delete {
   visibility: visible;
+}
+
+.lane {
+  display: inline-block;
+
+  margin: 1em;
+
+  background-color: #efefef;
+  border: 1px solid #ccc;
+  border-radius: 0.5em;
+
+  min-width: 10em;
+  vertical-align: top;
+}
+
+.lane-header {
+overflow: auto;
+
+  padding: 1em;
+
+  color: #efefef;
+  background-color: #333;
+
+  border-top-left-radius: 0.5em;
+  border-top-right-radius: 0.5em;
+}
+
+.lane-name {
+  float: left;
+}
+
+.lane-add-note {
+  float: right;
+  margin-left: 0.5em;
+}
+
+.add-lane, .lane-add-note button {
+  background-color: #fdfdfd;
+  border: 1px solid #ccc;
 }
